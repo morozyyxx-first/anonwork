@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Создать вакансию | Панель работодателя</title>
+    <link rel="stylesheet" href="new_item_style.css">
+</head>
+<body>
+    <a href="index.html" class="back-link">&larr; Вернуться к вакансиям</a>
+
+    <div class="panel-container">
+        <header class="panel-header">
+            <h2>Публикация вакансии</h2>
+            <p>Заполните форму, чтобы найти идеального кандидата</p>
+        </header>
+
+        <!-- Обрати внимание на onsubmit="PostJob(event)" -->
+        <form id="newJobForm" class="job-form" onsubmit="PostJob(event)">
+
+            <div class="input-group">
+                <input type="text" id="jobTitle" required>
+                <label>Должность</label>
+            </div>
+
+            <div class="input-group">
+                <input type="text" id="companyName" required>
+                <label>Название компании</label>
+            </div>
+
+            <div class="input-row">
+                <div class="input-group">
+                    <input type="text" id="jobSalary" required>
+                    <label>Зарплата</label>
+                </div>
+                <div class="input-group">
+                    <input type="text" id="jobLocation" required>
+                    <label>Локация</label>
+                </div>
+                <div class="input-group">
+                    <input type="text" id="contactData" required>
+                    <label>Контактные данные</label>
+                </div>
+            </div>
+
+            <!-- Селектор типа занятости -->
+            <div class="select-group">
+                <label class="select-label">Время работы</label>
+                <select id="jobType" required>
+                    <option value="" disabled selected hidden></option>
+                    <option value="fulltime">Полный день (Full-time)</option>
+                    <option value="parttime">Частичная занятость (Part-time)</option>
+                    <option value="contract">Контракт / Фриланс</option>
+                    <option value="internship">Стажировка</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <textarea id="jobDesc" rows="6" required></textarea>
+                <label>Описание (максимум 300 символов)</label>
+            </div>
+
+            <!-- Динамический блок для ввода тегов/навыков -->
+            <div class="skills-component">
+                <label class="component-label">Ключевые навыки (через Enter)</label>
+                <div class="skills-input-wrapper" id="skillsContainer">
+                    <input type="text" id="skillInput" placeholder="Например: React, Python, Git...">
+                </div>
+            </div>
+
+            <button type="submit" class="btn-submit">Разместить вакансию</button>
+        </form>
+    </div>
+
+    <script>
+        // --- ДИНАМИЧЕСКИЕ ТЕГИ НАВЫКОВ ---
+        const skillInput = document.getElementById('skillInput');
+        const skillsContainer = document.getElementById('skillsContainer');
+        const savedSkills = []; // Массив, где хранятся навыки
+
+        skillInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault(); // Запрещаем отправку формы по Enter
+                const tagText = this.value.trim();
+
+                if (tagText && !savedSkills.includes(tagText)) {
+                    savedSkills.push(tagText);
+
+                    // Создаем визуальный тег
+                    const tag = document.createElement('span');
+                    tag.className = 'skill-tag';
+                    tag.innerHTML = `${tagText} <span class="remove-tag">&times;</span>`;
+
+                    // Удаление тега при клике на крестик
+                    tag.querySelector('.remove-tag').addEventListener('click', () => {
+                        const index = savedSkills.indexOf(tagText);
+                        if (index > -1) savedSkills.splice(index, 1);
+                        tag.remove();
+                    });
+
+                    // Вставляем тег ПЕРЕД инпутом
+                    skillsContainer.insertBefore(tag, skillInput);
+                    this.value = '';
+                }
+            }
+        });
+
+        // ---ОТПРАВКА НА БЭКЕНД ---
+        async function PostJob(event) {
+            event.preventDefault();
+
+            const title = document.getElementById("jobTitle");
+            const company_name = document.getElementById("companyName");
+            const salary = document.getElementById("jobSalary");
+            const location = document.getElementById("jobLocation");
+            const job_time = document.getElementById("jobType");
+            const desc = document.getElementById("jobDesc");
+            const contactData = document.getElementById("contactData");
+
+            try {
+                const response = await fetch("http://192.168.100.51:7777/items/add", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json" // Вот тут JSON идеален, так как нет файлов!
+                    },
+                    body: JSON.stringify(
+                        {
+                            title: title.value,
+                            name_of_company: company_name.value,
+                            salary: salary.value,
+                            location: location.value,
+                            contacts: contactData.value,
+                            job_time: job_time.value,
+                            description: desc.value,
+                            skills: savedSkills
+                        }
+                    )
+                });
+
+                if (response.ok) {
+                    window.location.href = "index.html"; // Или страница со списком вакансий
+                } else {
+                    alert("Ошибка сервера при публикации вакансии!");
+                }
+            } catch (err) {
+                console.error("Критическая ошибка:", err);
+            }
+        }
+    </script>
+</body>
+</html>
