@@ -1,8 +1,7 @@
 fastapi
 uvicorn
 sqlalchemy
-psycopg2
-psycopg
+psycopg2-binary
 pydantic
 greenlet
 asyncpg
