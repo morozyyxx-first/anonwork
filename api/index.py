@@ -3,7 +3,6 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from db.db_engine import init_db
-from users import user_handles
 from items import item_handles
 
 async def lifespan(app: FastAPI):
@@ -13,7 +12,6 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     lifespan=lifespan,
 )
-app.include_router(user_handles.router)
 app.include_router(item_handles.router)
 app.add_middleware(
     CORSMiddleware,
