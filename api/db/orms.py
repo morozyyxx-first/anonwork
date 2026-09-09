@@ -2,7 +2,7 @@ from typing import List
 
 from sqlalchemy import String, JSON
 from sqlalchemy.orm import Mapped, mapped_column
-from api.db.db_engine import Base
+from .db_engine import Base
 
 class UsersORM(Base):
     __tablename__ = "users"
