@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from .db.db_engine import init_db
 from .items import item_handles
 
-async def lifespan(app: FastAPI):
+def lifespan(app: FastAPI):
     init_db()
     yield
 
