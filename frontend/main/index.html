@@ -35,7 +35,7 @@
             try {
                 // 1. Делаем GET-запрос к твоей готовой ручке на FastAPI
                 // Замени URL на свой эндпоинт, например: http://127.0.0.1:7777/products/all или /jobs/all
-                const response = await fetch("http://192.168.100.51:7777/items/get");
+                const response = await fetch("http://0.0.0.0:7777/items/get");
 
                 if (!response.ok) {
                     throw new Error("Не удалось загрузить вакансии");

@@ -2,8 +2,8 @@ from items.item_schema import ItemSchema
 from .orms import ItemsORM
 from .db_engine import get_session
 
-async def add_item(item: ItemSchema):
-    async with await get_session() as session:
+def add_item(item: ItemSchema):
+    with get_session() as session:
         session.add(
             ItemsORM(
                 title=item.title,
@@ -16,4 +16,4 @@ async def add_item(item: ItemSchema):
                 skills=item.skills
             )
         )
-        await session.commit()
+        session.commit()

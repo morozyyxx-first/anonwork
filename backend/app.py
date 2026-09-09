@@ -7,7 +7,7 @@ from users import user_handles
 from items import item_handles
 
 async def lifespan(app: FastAPI):
-    await init_db()
+    init_db()
     yield
 
 app = FastAPI(

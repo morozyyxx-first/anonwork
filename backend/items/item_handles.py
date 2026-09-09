@@ -12,14 +12,14 @@ router = APIRouter(
 
 @router.post("/add")
 async def new_item(item: ItemSchema):
-    await add_item(item)
+    add_item(item)
 
 
 @router.get("/get")
 async def get_items():
-    return await get_all_items()
+    return get_all_items()
 
 
 @router.delete("/delete")
 async def remove_item(item_id: int):
-    await delete_item(item_id)
+    delete_item(item_id)

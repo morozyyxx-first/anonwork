@@ -118,7 +118,7 @@
             const contactData = document.getElementById("contactData");
 
             try {
-                const response = await fetch("http://192.168.100.51:7777/items/add", {
+                const response = await fetch("http://0.0.0.0:7777/items/add", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json" // Вот тут JSON идеален, так как нет файлов!
