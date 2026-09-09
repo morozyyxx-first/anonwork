@@ -1,9 +1,9 @@
 from fastapi import APIRouter
 
-from .item_schema import ItemSchema
-from ..db.db_add_item import add_item
-from ..db.db_get_items import get_all_items
-from ..db.db_delete_item import delete_item
+from api.items.item_schema import ItemSchema
+from api.db.db_add_item import add_item
+from api.db.db_get_items import get_all_items
+from api.db.db_delete_item import delete_item
 
 router = APIRouter(
     prefix="/items",
