@@ -74,8 +74,7 @@
         const skillsContainer = document.getElementById('skillsContainer');
         const savedSkills = []; // Массив, где хранятся навыки
 
-        skillInput.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') {
+        skillInput.addEventListener('submit', function(e) {
                 const tagText = this.value.trim();
 
                 if (tagText && !savedSkills.includes(tagText)) {
@@ -93,7 +92,6 @@
 
                     skillsContainer.insertBefore(tag, skillInput);
                     this.value = '';
-                }
             }
         });
 
