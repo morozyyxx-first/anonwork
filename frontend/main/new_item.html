@@ -15,7 +15,6 @@
             <p>Заполните форму, чтобы найти идеального кандидата</p>
         </header>
 
-        <!-- Обрати внимание на onsubmit="PostJob(event)" -->
         <form id="newJobForm" class="job-form" onsubmit="PostJob(event)">
 
             <div class="input-group">
@@ -43,7 +42,6 @@
                 </div>
             </div>
 
-            <!-- Селектор типа занятости -->
             <div class="select-group">
                 <label class="select-label">Время работы</label>
                 <select id="jobType" required>
@@ -60,7 +58,6 @@
                 <label>Описание (максимум 300 символов)</label>
             </div>
 
-            <!-- Динамический блок для ввода тегов/навыков -->
             <div class="skills-component">
                 <label class="component-label">Ключевые навыки (через Enter)</label>
                 <div class="skills-input-wrapper" id="skillsContainer">
@@ -73,39 +70,33 @@
     </div>
 
     <script>
-        // --- ДИНАМИЧЕСКИЕ ТЕГИ НАВЫКОВ ---
         const skillInput = document.getElementById('skillInput');
         const skillsContainer = document.getElementById('skillsContainer');
         const savedSkills = []; // Массив, где хранятся навыки
 
         skillInput.addEventListener('keydown', function(e) {
             if (e.key === 'Enter') {
-                e.preventDefault(); // Запрещаем отправку формы по Enter
                 const tagText = this.value.trim();
 
                 if (tagText && !savedSkills.includes(tagText)) {
                     savedSkills.push(tagText);
 
-                    // Создаем визуальный тег
                     const tag = document.createElement('span');
                     tag.className = 'skill-tag';
                     tag.innerHTML = `${tagText} <span class="remove-tag">&times;</span>`;
 
-                    // Удаление тега при клике на крестик
                     tag.querySelector('.remove-tag').addEventListener('click', () => {
                         const index = savedSkills.indexOf(tagText);
                         if (index > -1) savedSkills.splice(index, 1);
                         tag.remove();
                     });
 
-                    // Вставляем тег ПЕРЕД инпутом
                     skillsContainer.insertBefore(tag, skillInput);
                     this.value = '';
                 }
             }
         });
 
-        // ---ОТПРАВКА НА БЭКЕНД ---
         async function PostJob(event) {
             event.preventDefault();
 
@@ -118,10 +109,10 @@
             const contactData = document.getElementById("contactData");
 
             try {
-                const response = await fetch("http://0.0.0.0:7777/items/add", {
+                const response = await fetch("/api/items/add", {
                     method: "POST",
                     headers: {
-                        "Content-Type": "application/json" // Вот тут JSON идеален, так как нет файлов!
+                        "Content-Type": "application/json" 
                     },
                     body: JSON.stringify(
                         {
@@ -138,7 +129,7 @@
                 });
 
                 if (response.ok) {
-                    window.location.href = "index.html"; // Или страница со списком вакансий
+                    window.location.href = "index.html"; 
                 } else {
                     alert("Ошибка сервера при публикации вакансии!");
                 }

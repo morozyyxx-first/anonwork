@@ -8,64 +8,48 @@
 </head>
 <body>
 
-    <!-- Шапка сайта -->
     <header class="main-header">
         <div class="logo">anonwork - анонимные вакансии</div>
         <a href="/frontend/main/new_item.html" class="btn-create">Разместить вакансию</a>
     </header>
-
-    <!-- Главный контент -->
     <main class="catalog-container">
         <section class="welcome-section">
             <h1>Путь в IT начинается здесь</h1>
             <p>Актуальные предложения от технологических компаний</p>
         </section>
 
-        <!-- Контейнер, куда JS вставит карточки из базы данных -->
         <div class="vacancies-grid" id="vacanciesContainer">
-            <!-- Сюда с помощью цикла JS вставит вакансии (пока тут пусто) -->
         </div>
     </main>
 
     <script>
-        // Функция, которая запрашивает вакансии у бэкенда и рендерит их
         async function fetchAndRenderJobs() {
             const container = document.getElementById('vacanciesContainer');
 
             try {
-                // 1. Делаем GET-запрос к твоей готовой ручке на FastAPI
-                // Замени URL на свой эндпоинт, например: http://127.0.0.1:7777/products/all или /jobs/all
-                const response = await fetch("http://0.0.0.0:7777/items/get");
+                const response = await fetch("/api/items/get");
 
                 if (!response.ok) {
                     throw new Error("Не удалось загрузить вакансии");
                 }
 
-                // 2. Получаем список словарей [{}, {}, {}]
                 const jobs = await response.json();
 
-                // Очищаем контейнер (на случай, если там что-то было)
                 container.innerHTML = "";
 
-                // Проверяем, если вакансий в базе нет вообще
                 if (jobs.length === 0) {
                     container.innerHTML = `<p class="no-jobs">Пока нет доступных вакансий. Будьте первым, кто разместит!</p>`;
                     return;
                 }
 
-                // 3. ЦИКЛ: Проходим по каждому элементу массива
                 jobs.forEach(job => {
-                    // Обрабатываем теги навыков (если они приходят строкой или массивом)
-                    // Для примера сделаем заглушку, либо если у тебя это массив строк:
                     let tagsHtml = "";
                     if (job.skills && Array.isArray(job.skills)) {
                         tagsHtml = job.skills.map(skill => `<span class="tag">${skill}</span>`).join('');
                     } else {
-                        // Если навыки записаны просто в описании или их пока нет, выведем дефолтные
                         tagsHtml = `<span class="tag">Удаленка</span><span class="tag">IT</span>`;
                     }
 
-                    // 4. Создаем HTML-код карточки динамически, подставляя ключи из твоего словаря
                     const jobCard = `
                         <div class="job-card">
                             <div class="card-header">
@@ -84,7 +68,6 @@
                         </div>
                     `;
 
-                    // 5. Добавляем созданную карточку в общий контейнер на странице
                     container.innerHTML += jobCard;
                 });
 
@@ -94,7 +77,6 @@
             }
         }
 
-        // Запускаем функцию сразу при загрузке страницы index.html
         document.addEventListener("DOMContentLoaded", fetchAndRenderJobs);
     </script>
 </body>
