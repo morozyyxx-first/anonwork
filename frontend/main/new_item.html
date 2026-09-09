@@ -74,25 +74,27 @@
         const skillsContainer = document.getElementById('skillsContainer');
         const savedSkills = []; // Массив, где хранятся навыки
 
-        skillInput.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const tagText = this.value.trim();
+        skillInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && e.target.tagName != 'TEXTAREA') {
+                e.preventDefault();
+                const tagText = this.value.trim();
 
-            if (tagText && !savedSkills.includes(tagText)) {
-                savedSkills.push(tagText);
+                if (tagText && !savedSkills.includes(tagText)) {
+                    savedSkills.push(tagText);
 
-                const tag = document.createElement('span');
-                tag.className = 'skill-tag';
-                tag.innerHTML = `${tagText} <span class="remove-tag">&times;</span>`;
+                    const tag = document.createElement('span');
+                    tag.className = 'skill-tag';
+                    tag.innerHTML = `${tagText} <span class="remove-tag">&times;</span>`;
 
-                tag.querySelector('.remove-tag').addEventListener('click', () => {
-                    const index = savedSkills.indexOf(tagText);
-                    if (index > -1) savedSkills.splice(index, 1);
-                    tag.remove();
-                });
+                    tag.querySelector('.remove-tag').addEventListener('click', () => {
+                        const index = savedSkills.indexOf(tagText);
+                        if (index > -1) savedSkills.splice(index, 1);
+                        tag.remove();
+                    });
 
-                skillsContainer.insertBefore(tag, skillInput);
-                this.value = '';
+                    skillsContainer.insertBefore(tag, skillInput);
+                    this.value = '';
+                }
             }
         });
 
