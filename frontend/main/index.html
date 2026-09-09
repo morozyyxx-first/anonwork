@@ -27,7 +27,7 @@
             const container = document.getElementById('vacanciesContainer');
 
             try {
-                const response = await fetch("https://anonwork-beta.vercel.app");
+                const response = await fetch("https://anonwork-beta.vercel.app/api/items/get");
 
                 if (!response.ok) {
                     throw new Error("Не удалось загрузить вакансии");
