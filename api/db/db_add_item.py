@@ -1,6 +1,6 @@
 from items.item_schema import ItemSchema
-from .orms import ItemsORM
-from .db_engine import get_session
+from api.db.orms import ItemsORM
+from api.db.db_engine import get_session
 
 def add_item(item: ItemSchema):
     with get_session() as session:

@@ -2,10 +2,10 @@ import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from .db.db_engine import init_db
-from .items import item_handles
+from api.db.db_engine import init_db
+from api.items import item_handles
 
-def lifespan(app: FastAPI):
+async def lifespan(app: FastAPI):
     init_db()
     yield
 
